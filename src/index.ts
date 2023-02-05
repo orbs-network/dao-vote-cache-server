@@ -28,7 +28,7 @@ export function serve() {
   });
 
   app.get('/contract', (_request, response) => {
-    response.status(200).json(votingContract);
+    response.status(200).json(votingContract.toFriendly());
   });
 
   app.get('/results', (_request, response) => {
