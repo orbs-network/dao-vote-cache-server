@@ -7,6 +7,7 @@ import { State } from './state';
 import { Fetcher } from './fetcher';
 
 const SOCKET_TIMEOUT_SEC = 60;
+const PORT = Number(process.env.PORT) || 3000;
 
 
 export function serve() {
@@ -57,8 +58,8 @@ export function serve() {
   const fetcherSyncTask = new TaskLoop(() => fetcher.run(), 60 * 1000);  
   fetcherSyncTask.start();
 
-  const server = app.listen(3001, '0.0.0.0', () =>
-    Logger.log(`Management service listening on port ${3001}!`)
+  const server = app.listen(PORT, '0.0.0.0', () =>
+    Logger.log(`Dao Vote Server is listening on port ${PORT}!`)
   );
 
   server.setTimeout(SOCKET_TIMEOUT_SEC * 1000);
