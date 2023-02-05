@@ -1,4 +1,4 @@
-import {getClientV2, getClientV4, getProposalInfo, getTransactions, getAllVotes, getVotingPower, getCurrentResults} from "./logic";
+import {getClientV2, getClientV4, getProposalInfo, getTransactions, getAllVotes, getVotingPower, getCurrentResults} from "./contract-api/logic";
 import { TonClient, TonClient4 } from "ton";
 import {State} from "./state";
 import {TxData, VotingPower, Votes, ProposalResults, ProposalInfo} from "./types";
