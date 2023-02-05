@@ -1,4 +1,4 @@
-import {SNAKE_PREFIX, ONCHAIN_CONTENT_PREFIX, KEY_LEN, KEY_VAL} from "/contracts/config";
+import {SNAKE_PREFIX, ONCHAIN_CONTENT_PREFIX, KEY_LEN, KEY_VAL} from "../contracts/config";
 import { Address, Cell } from "ton";
 import { votingContract } from "./address";
 
