@@ -9,7 +9,6 @@ export class State {
     private proposalInfo: ProposalInfo | undefined;
     private lastUpdateTime: Number | undefined;
 
-
     getState() {
 
         return {
