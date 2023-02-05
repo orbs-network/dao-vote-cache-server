@@ -1,4 +1,5 @@
 import {TxData,VotingPower, Votes, ProposalResults, ProposalInfo} from "./types";
+import * as Logger from './logger';
 
 export class State {
 
@@ -52,7 +53,7 @@ export class State {
     }
 
     setState(txData: TxData, votingPower: VotingPower, votes: Votes, proposalResults: ProposalResults) {
-        console.log(`updating state ...`);
+        Logger.log(`updating state ...`);
         
         this.txData = txData;
         this.votingPower = votingPower;

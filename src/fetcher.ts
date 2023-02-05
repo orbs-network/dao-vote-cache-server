@@ -3,6 +3,7 @@ import {getFrozenAddresses} from "./contract-api/getters";
 import { TonClient, TonClient4 } from "ton";
 import {State} from "./state";
 import {TxData, VotingPower, Votes, ProposalResults, ProposalInfo} from "./types";
+import * as Logger from './logger';
 
 
 export class Fetcher {
@@ -37,7 +38,7 @@ export class Fetcher {
         this.fetchUpdate = Date.now();
 
         if (newTxData.toLt == txData.toLt) {
-            console.log(`Nothing to fetch`);
+            Logger.log(`Nothing to fetch`);
             return;
         }
 
