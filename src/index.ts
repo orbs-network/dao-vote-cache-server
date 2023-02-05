@@ -35,9 +35,8 @@ export function serve() {
     response.status(200).json(state.getProposalResults());
   });
 
-  app.get('/frozenAddresses', (_request, response) => {
-    const body = ''; // TODO: fixme
-    response.status(200).json(body);
+  app.get('/frozen', (_request, response) => {
+    response.status(200).json(state.getFrozenAddresses());
   });
 
   app.get('/stateUpdateTime', (_request, response) => {
