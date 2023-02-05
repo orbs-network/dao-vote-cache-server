@@ -41,6 +41,10 @@ export class State {
         return this.proposalInfo;
     }
 
+    setProposalInfo(proposalInfo: ProposalInfo) {
+        this.proposalInfo = proposalInfo;
+    }
+
     setState(txData: TxData, votingPower: VotingPower, votes: Votes, proposalResults: ProposalResults) {
         console.log(`updating state ...`);
         
@@ -49,9 +53,5 @@ export class State {
         this.votes = votes;
         this.proposalResults = proposalResults;
         this.updateTime = Date.now();
-    }
-
-    setProposalInfo(proposalInfo: ProposalInfo) {
-        this.proposalInfo = proposalInfo;
     }
 }

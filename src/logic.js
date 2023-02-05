@@ -118,26 +118,15 @@ export async function getVotingPower(
 
 export async function getSingleVotingPower(
   clientV4,
-  proposalInfo,
-  transactions,
-  votingPower = {}
+  mcSnapshotBlock,
+  address
 ) {
-  let voters = Object.keys(getAllVotes(transactions, proposalInfo));
-
-  let newVoters = [...new Set([...voters, ...Object.keys(votingPower)])];
-
-  if (!newVoters) return votingPower;
-
-  for (const voter of newVoters) {
-    votingPower[voter] = (
+    return (
       await clientV4.getAccountLite(
-        proposalInfo.snapshot.mcSnapshotBlock,
+        mcSnapshotBlock,
         Address.parse(voter)
       )
     ).account.balance.coins;
-  }
-
-  return votingPower;
 }
 
 export function calcProposalResult(votes, votingPower) {
