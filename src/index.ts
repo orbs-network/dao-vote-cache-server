@@ -5,6 +5,7 @@ import { TaskLoop } from './task-loop';
 import * as Logger from './logger';
 import { State } from './state';
 import { Fetcher } from './fetcher';
+import { votingContract } from "./contract-api/address";
 
 const SOCKET_TIMEOUT_SEC = 60;
 const PORT = Number(process.env.PORT) || 3000;
@@ -24,6 +25,10 @@ export function serve() {
 
   app.get('/info', (_request, response) => {
     response.status(200).json(state.getProposalInfo());
+  });
+
+  app.get('/contract', (_request, response) => {
+    response.status(200).json(votingContract);
   });
 
   app.get('/results', (_request, response) => {
