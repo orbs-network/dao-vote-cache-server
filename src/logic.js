@@ -7,7 +7,6 @@ import BigNumber from "bignumber.js";
 import _ from "lodash";
 
 
-
 export async function getClientV2(customEndpoint=null, apiKey=null) {
   if (customEndpoint) {
     return new TonClient({ endpoint: customEndpoint, apiKey });

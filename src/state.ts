@@ -14,6 +14,7 @@ export class State {
         return {
             votes: this.votes,
             proposalResults: this.proposalResults,
+            votingPower: this.votingPower,
         }
     }
 
