@@ -7,9 +7,17 @@ export class State {
     private votes: Votes = {};
     private proposalResults: ProposalResults | undefined;
     private proposalInfo: ProposalInfo | undefined;
-    private lastUpdateTime: Number | undefined;
+    private updateTime: Number | undefined;
 
     getState() {
+
+        return {
+            votes: this.votes,
+            proposalResults: this.proposalResults,
+        }
+    }
+
+    getFullState() {
 
         return {
             txData: this.txData,
@@ -17,8 +25,12 @@ export class State {
             votes: this.votes,
             proposalResults: this.proposalResults,
             proposalInfo: this.proposalInfo,
-            lastStateUpdate: this.lastUpdateTime
+            updateTime: this.updateTime
         }
+    }
+
+    getStateUpdateTime() {
+        return this.updateTime;
     }
 
     getProposalResults() {
@@ -36,7 +48,7 @@ export class State {
         this.votingPower = votingPower;
         this.votes = votes;
         this.proposalResults = proposalResults;
-        this.lastUpdateTime = Date.now();
+        this.updateTime = Date.now();
     }
 
     setProposalInfo(proposalInfo: ProposalInfo) {

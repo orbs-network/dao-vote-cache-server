@@ -30,17 +30,17 @@ export function serve() {
     response.status(200).json(state.getProposalResults());
   });
 
-  app.get('/votes', (_request, response) => {
-    response.status(200).json(state.getProposalInfo());
-  });
-
   app.get('/frozenAddresses', (_request, response) => {
-    const body = '';
+    const body = ''; // TODO: fixme
     response.status(200).json(body);
   });
 
-  app.get('/lastFetchUpdate', (_request, response) => {
-    response.status(200).json(fetcher.getLastFetchUpdate());
+  app.get('/stateUpdateTime', (_request, response) => {
+    response.status(200).json(state.getStateUpdateTime());
+  });
+
+  app.get('/fetchUpdateTime', (_request, response) => {
+    response.status(200).json(fetcher.getFetchUpdateTime());
   });
 
   app.use((error: Error, req: Request, res: Response, next: NextFunction) => {

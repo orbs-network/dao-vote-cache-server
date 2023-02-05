@@ -9,7 +9,7 @@ export class Fetcher {
     private client: TonClient | undefined;
     private client4: TonClient4 | undefined;
     private state: State;
-    private lastFetchUpdate: Number = Date.now();
+    private fetchUpdate: Number = Date.now();
 
     constructor(state: State) {
         this.state = state;
@@ -26,11 +26,11 @@ export class Fetcher {
 
     async run() {
 
-        const {txData, votingPower, proposalInfo} = this.state.getState();
+        const {txData, votingPower, proposalInfo} = this.state.getFullState();
 
         let newTxData = await this.getTransactions(txData);
         
-        this.lastFetchUpdate = Date.now();
+        this.fetchUpdate = Date.now();
 
         if (newTxData.toLt == txData.toLt) {
             console.log(`Nothing to fetch`);
@@ -47,8 +47,8 @@ export class Fetcher {
         this.state.setState(newTxData, newVotingPower, newVotes, newProposalResults);
     }
 
-    getLastFetchUpdate() {
-        return this.lastFetchUpdate;
+    getFetchUpdateTime() {
+        return this.fetchUpdate;
     }
 
     async getTransactions(txData: TxData) : Promise<{ tx: any; toLt: string; }> {
