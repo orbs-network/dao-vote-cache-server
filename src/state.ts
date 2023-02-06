@@ -17,6 +17,7 @@ export class State {
             votes: this.votes,
             proposalResults: this.proposalResults,
             votingPower: this.votingPower,
+            maxLt: this.txData.toLt
         }
     }
 
