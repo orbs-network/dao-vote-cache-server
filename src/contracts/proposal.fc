@@ -37,7 +37,6 @@
     return proposal_snapshot_time;
 }
 
-
 (cell) frozen_addresses() method_id {
     var (proposal_start_time, proposal_end_time, proposal_snapshot_time, frozen_addresses) = load_data();
     return frozen_addresses;

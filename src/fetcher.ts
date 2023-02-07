@@ -35,10 +35,9 @@ export class Fetcher {
 
         let newTxData = await this.getTransactions(txData);
         
-        this.fetchUpdate = Date.now();
-
         if (newTxData.toLt == txData.toLt) {
             Logger.log(`Nothing to fetch`);
+            this.fetchUpdate = Date.now();
             return;
         }
 
@@ -50,6 +49,7 @@ export class Fetcher {
         let newProposalResults = await this.getCurrentResults(proposalInfo, newTxData.tx, newVotingPower);
 
         this.state.setState(newTxData, newVotingPower, newVotes, newProposalResults);
+        this.fetchUpdate = Date.now();
     }
 
     getFetchUpdateTime() {
