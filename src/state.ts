@@ -9,7 +9,7 @@ export class State {
     private proposalResults: ProposalResults | undefined;
     private proposalInfo: ProposalInfo | undefined;
     private updateTime: Number | undefined;
-    private frozenAddresses = [];
+    private frozenAddresses: string[] = [];
 
     getState() {
 
@@ -67,7 +67,7 @@ export class State {
         this.updateTime = Date.now();
     }
 
-    setFrozenAddresses(frozenAddresses: []) {
+    setFrozenAddresses(frozenAddresses: string[]) {
         this.frozenAddresses = frozenAddresses;
     }
 }

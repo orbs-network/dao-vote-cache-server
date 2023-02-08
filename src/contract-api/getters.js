@@ -3,39 +3,28 @@ import { Address, Cell } from "ton";
 import { votingContract } from "./address";
 
 
-export async function getFrozenAddresses(client, clientV4) {
+export async function getFrozenAddresses(client) {
   
-    let res = await client.callGetMethod(votingContract, "frozen_addresses");
-    const frozen_addresses = res.stack[0][1].bytes;
-  
-    let cell = Cell.fromBoc(Buffer.from(frozen_addresses, 'base64').toString('hex'))[0]
-  
-    const contentSlice = cell.beginParse();
-    if (contentSlice.readUint(8).toNumber() !== ONCHAIN_CONTENT_PREFIX)
-      throw new Error("Expected onchain content marker");
-  
-  
-    const dict = contentSlice.readDict(KEY_LEN, (s) => {
-      const buffer = Buffer.from("");
-  
-      const sliceToVal = (s, v, isFirst) => {
-        s.toCell().beginParse();
-        if (isFirst && s.readUint(8).toNumber() !== SNAKE_PREFIX)
-          throw new Error("Only snake format is supported");
-  
-        v = Buffer.concat([v, s.readRemainingBytes()]);
-        if (s.remainingRefs === 1) {
-          v = sliceToVal(s.readRef(), v, false);
-        }
-  
-        return v;
-      };
-  
-      return sliceToVal(s.readRef(), buffer, true);
-    });
-    
-    return (dict.get(`${KEY_VAL}`).toString()).split(', ');
+  let res = await client.callGetMethod(votingContract, "frozen_addresses");
+  let boc = Buffer.from(res.stack[0][1].bytes, 'base64').toString('hex');
+  let cell = Cell.fromBoc(boc)[0]
+
+  let contentSlice = cell.beginParse();
+  let frozenAddresses = []
+  while (true) {
+
+    while (contentSlice.remaining) {
+      let s = contentSlice.readAddress();
+      console.log(s);
+      frozenAddresses.push(s.toFriendly())
+    }
+
+    if (!(contentSlice.remainingRefs)) break;
+    contentSlice = contentSlice.readRef();
   }
+
+  return frozenAddresses
+}
 
 export async function getSnapshotTime(client, clientV4) {
   const res = await client.callGetMethod(

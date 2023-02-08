@@ -1,4 +1,4 @@
-# Cache server for TON Community DAO Vote
+# Cache Server for TON Community DAO Vote
 
 This is a simple cache server for the [TON Community DAO Vote](https://ton.vote/).
 The app is deployed to [heroku](https://dao-vote-cache-server.herokuapp.com/info) and exposes several APIs: 

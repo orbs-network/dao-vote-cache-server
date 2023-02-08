@@ -25,7 +25,7 @@ export class Fetcher {
         const proposalInfo = await getProposalInfo(this.client, this.client4);
         this.state.setProposalInfo(proposalInfo);
 
-        const frozenAddresses = await getFrozenAddresses(this.client, this.client4);
+        const frozenAddresses = await getFrozenAddresses(this.client);
         this.state.setFrozenAddresses(frozenAddresses);
     }
 
