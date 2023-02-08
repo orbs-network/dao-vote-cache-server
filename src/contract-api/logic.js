@@ -75,8 +75,8 @@ export function getAllVotes(transactions, proposalInfo) {
     if (!vote) continue;
 
     if (
-      transactions[i].time < proposalInfo.startDate ||
-      transactions[i].time > proposalInfo.endDate
+      transactions[i].time < proposalInfo.startTime ||
+      transactions[i].time > proposalInfo.endTime
     )
       continue;
 
@@ -194,8 +194,8 @@ export function getCurrentResults(transactions, votingPower, proposalInfo) {
 export async function getProposalInfo(client, clientV4) {
 
   return {
-    startDate: await getStartTime(client),
-    endDate: await getEndTime(client),
+    startTime: await getStartTime(client),
+    endTime: await getEndTime(client),
     snapshot: await getSnapshotTime(client, clientV4),
   };
 }
