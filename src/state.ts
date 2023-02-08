@@ -49,6 +49,10 @@ export class State {
         return this.proposalInfo;
     }
 
+    getMaxLt() {
+        return this.txData.toLt;
+    }
+    
     setProposalInfo(proposalInfo: ProposalInfo) {
         this.proposalInfo = proposalInfo;
     }

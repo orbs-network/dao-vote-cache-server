@@ -47,6 +47,10 @@ export function serve() {
     response.status(200).json(fetcher.getFetchUpdateTime());
   });
 
+  app.get('/maxLt', (_request, response) => {
+    response.status(200).json(state.getMaxLt());
+  });
+
   app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
     if (error instanceof Error) {
       Logger.error(`Error response to ${req.url}: ${errorString(error)}.`);
