@@ -15,7 +15,6 @@ export async function getFrozenAddresses(client) {
 
     while (contentSlice.remaining) {
       let s = contentSlice.readAddress();
-      console.log(s);
       frozenAddresses.push(s.toFriendly())
     }
 
