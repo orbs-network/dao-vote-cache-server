@@ -85,6 +85,7 @@ export function getAllVotes(transactions, proposalInfo) {
     allVotes[transactions[i].inMessage.source] = {
       timestamp: transactions[i].time,
       vote: "",
+      hash: transactions[i].id.hash
     };
 
     if (["y", "yes"].includes(vote)) {
