@@ -6,23 +6,16 @@ import { votingContract } from "./address";
 export async function getFrozenAddresses(client) {
   
   let res = await client.callGetMethod(votingContract, "frozen_addresses");
-  let boc = Buffer.from(res.stack[0][1].bytes, 'base64').toString('hex');
-  let cell = Cell.fromBoc(boc)[0]
 
-  let contentSlice = cell.beginParse();
-  let frozenAddresses = []
-  while (true) {
+  let frozen = res.stack[0][1].elements.map( (element) => {
+    let boc = Buffer.from(element.cell.bytes, 'base64').toString('hex');
+    let cell = Cell.fromBoc(boc)[0]
+    let contentSlice = cell.beginParse();
+    let frozenAddr = contentSlice.readAddress();
+    return frozenAddr
+  });
 
-    while (contentSlice.remaining) {
-      let s = contentSlice.readAddress();
-      frozenAddresses.push(s.toFriendly())
-    }
-
-    if (!(contentSlice.remainingRefs)) break;
-    contentSlice = contentSlice.readRef();
-  }
-
-  return frozenAddresses
+  return frozen.reverse();
 }
 
 export async function getSnapshotTime(client, clientV4) {
