@@ -11,7 +11,7 @@ export async function getFrozenAddresses(client) {
     let boc = Buffer.from(element.cell.bytes, 'base64').toString('hex');
     let cell = Cell.fromBoc(boc)[0]
     let contentSlice = cell.beginParse();
-    let frozenAddr = contentSlice.readAddress();
+    let frozenAddr = contentSlice.readAddress().toFriendly();
     return frozenAddr
   });
 
