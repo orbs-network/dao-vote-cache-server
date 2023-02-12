@@ -1,6 +1,6 @@
 import { Address } from "ton";
 
 export const votingContract = Address.parse(
-    "EQBkVIFom9ldPeeUtk9WnkpHNM_Uh9uWS6aYrK2usyYj_Tz1"
+    "EQDGU1GC3wjaAqPPXfV5uOZN3AiKT_W2pgPA-pQywX4zjBX_"
 );
   
