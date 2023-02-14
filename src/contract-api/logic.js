@@ -2,6 +2,7 @@ import { getHttpEndpoint, getHttpV4Endpoint } from "@orbs-network/ton-access";
 import { Address, beginCell, Cell, TonClient, TonClient4 } from "ton";
 import {getFrozenAddresses, getStartTime, getEndTime, getSnapshotTime} from "./getters";
 import { votingContract } from "./address";
+import { WHALES_ADDRESSES } from "./whales";
 
 import BigNumber from "bignumber.js";
 import _ from "lodash";
@@ -76,7 +77,7 @@ export function getAllVotes(transactions, proposalInfo) {
 
     if (
       transactions[i].time < proposalInfo.startTime ||
-      transactions[i].time > proposalInfo.endTime
+      transactions[i].time > proposalInfo.endTime || WHALES_ADDRESSES.includes(transactions[i].inMessage.source)
     )
       continue;
 
