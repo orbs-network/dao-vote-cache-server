@@ -166,17 +166,17 @@ export function calcProposalResult(votes, votingPower) {
   const totalWeights = sumVotes.yes.plus(sumVotes.no).plus(sumVotes.abstain);
   const yesPct = sumVotes.yes
     .div(totalWeights)
-    .decimalPlaces(2)
+    .decimalPlaces(4)
     .multipliedBy(100)
     .toNumber();
   const noPct = sumVotes.no
     .div(totalWeights)
-    .decimalPlaces(2)
+    .decimalPlaces(4)
     .multipliedBy(100)
     .toNumber();
   const abstainPct = sumVotes.abstain
     .div(totalWeights)
-    .decimalPlaces(2)
+    .decimalPlaces(4)
     .multipliedBy(100)
     .toNumber();
 
