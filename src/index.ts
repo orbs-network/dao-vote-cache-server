@@ -35,10 +35,6 @@ export function serve() {
     response.status(200).json(state.getProposalResults());
   });
 
-  app.get('/frozen', (_request, response) => {
-    response.status(200).json(state.getFrozenAddresses());
-  });
-
   app.get('/stateUpdateTime', (_request, response) => {
     response.status(200).json(state.getStateUpdateTime());
   });

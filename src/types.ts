@@ -12,10 +12,8 @@ export interface Votes {
 }
 
 export interface ProposalResults {
-    yes: Number,
-    no: Number,
-    abstain: Number,
-    totalWeight: String,
+    [key: number]: number,
+    totalPower: string,
 }
 
 export interface ProposalInfo {

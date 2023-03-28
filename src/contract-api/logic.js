@@ -57,48 +57,61 @@ export async function getTransactions(
   return { allTxns, maxLt: maxLt.toString() };
 }
 
-export function filterTxByTimestamp(transactions, timestamp) {
-
-  const filteredTx = _.filter(tx.allTxns, function(transaction) {
-    return transaction.time <= lastTxTime;
+export function filterTxByTimestamp(transactions, lastLt) {
+  const filteredTx = _.filter(transactions, function (transaction) {
+    return Number(transaction.id.lt) <= Number(lastLt);
   });
 
   return filteredTx;
 }
 
+function verifyVote(vote) {
+  if (!vote) return false;
+  if (!Array.isArray(vote)) return false;
+  if (vote.length != VOTE_REQUIRED_NUM_OPTIONS) return false;
+
+  const voteObj = vote.reduce((accumulator, currentValue) => {
+    if (VOTE_OPTIONS.includes(currentValue)) {
+      accumulator[currentValue] =
+        currentValue in accumulator ? accumulator[currentValue] + 1 : 1;
+    }
+    return accumulator;
+  }, {});
+
+  return Object.keys(voteObj).length == VOTE_REQUIRED_NUM_OPTIONS;
+}
+
 export function getAllVotes(transactions, proposalInfo) {
   let allVotes = {};
-
+    
   for (let i = transactions.length - 1; i >= 0; i--) {
     const txnBody = transactions[i].inMessage.body;
 
-    let vote = txnBody.text;
-    if (!vote) continue;
+    if (!txnBody.text) continue;
+
+    // vote should be a string of numbers with or without comma
+    // e.g: '1, 2, 3' or '1 2 3'
+    const vote = txnBody.text.split(/[,\s]+/).map((numberString) => {
+      return parseInt(numberString.trim());
+    });
+
+    // verify user sent exatcly 3 options all of them are valid and every option appears only once
+    if (!verifyVote(vote)) continue;
 
     if (
       transactions[i].time < proposalInfo.startTime ||
-      transactions[i].time > proposalInfo.endTime || CUSTODIAN_ADDRESSES.includes(transactions[i].inMessage.source)
-    )
-      continue;
-
-    vote = vote.toLowerCase();
+      transactions[i].time > proposalInfo.endTime ||
+      CUSTODIAN_ADDRESSES.includes(transactions[i].inMessage.source)
+    ) continue;
 
     allVotes[transactions[i].inMessage.source] = {
       timestamp: transactions[i].time,
-      vote: "",
-      hash: transactions[i].id.hash
+      vote: vote,
+      hash: transactions[i].id.hash,
     };
-
-    if (["y", "yes"].includes(vote)) {
-      allVotes[transactions[i].inMessage.source].vote = "Yes";
-    } else if (["n", "no"].includes(vote)) {
-      allVotes[transactions[i].inMessage.source].vote = "No";
-    } else if (["a", "abstain"].includes(vote)) {
-      allVotes[transactions[i].inMessage.source].vote = "Abstain";
-    }
   }
 
-  
+
   return allVotes;
 }
 
@@ -126,66 +139,47 @@ export async function getVotingPower(
   return votingPower;
 }
 
-export async function getSingleVotingPower(
-  clientV4,
-  mcSnapshotBlock,
-  address
-) {
-    return (
-      await clientV4.getAccountLite(
-        mcSnapshotBlock,
-        Address.parse(address)
-      )
-    ).account.balance.coins;
+export async function getSingleVotingPower(clientV4, mcSnapshotBlock, address) {
+  return (
+    await clientV4.getAccountLite(mcSnapshotBlock, Address.parse(address))
+  ).account.balance.coins;
 }
 
 export function calcProposalResult(votes, votingPower) {
-  let sumVotes = {
-    yes: new BigNumber(0),
-    no: new BigNumber(0),
-    abstain: new BigNumber(0),
-  };
+  // sumVotes = {"0": 0, "1": 0, "2": 0, "3": 0, ...}
+  const sumVotes = VOTE_OPTIONS.reduce((accumulator, currentValue) => {
+    accumulator[currentValue] = new BigNumber(0);
+    return accumulator;
+  }, {});
 
   for (const [voter, vote] of Object.entries(votes)) {
     if (!(voter in votingPower))
       throw new Error(`voter ${voter} not found in votingPower`);
 
-      const _vote = vote.vote 
-
-    if (_vote === "Yes") {
-      sumVotes.yes = new BigNumber(votingPower[voter]).plus(sumVotes.yes);
-    } else if (_vote === "No") {
-      sumVotes.no = new BigNumber(votingPower[voter]).plus(sumVotes.no);
-    } else if (_vote === "Abstain") {
-      sumVotes.abstain = new BigNumber(votingPower[voter]).plus(
-        sumVotes.abstain
-      );
+    const voterPower = new BigNumber(votingPower[voter]);
+    const voterPowerPart = voterPower.div(vote.vote.length);
+    // vote.vote is an arary with exactly 3 options e.g.: ['7', '2', '5']
+    for (const _vote of vote.vote) {
+      sumVotes[_vote] = voterPowerPart.plus(sumVotes[_vote]);
     }
   }
 
-  const totalWeights = sumVotes.yes.plus(sumVotes.no).plus(sumVotes.abstain);
-  const yesPct = sumVotes.yes
-    .div(totalWeights)
-    .decimalPlaces(4)
-    .multipliedBy(100)
-    .toNumber();
-  const noPct = sumVotes.no
-    .div(totalWeights)
-    .decimalPlaces(4)
-    .multipliedBy(100)
-    .toNumber();
-  const abstainPct = sumVotes.abstain
-    .div(totalWeights)
-    .decimalPlaces(4)
-    .multipliedBy(100)
-    .toNumber();
+  let proposalResult = {};
+  let totalPower = new BigNumber(0);
 
-  return {
-    yes: yesPct,
-    no: noPct,
-    abstain: abstainPct,
-    totalWeight: totalWeights.toString(),
-  };
+  for (const optionTotalPower of Object.values(sumVotes)) {
+    totalPower = totalPower.plus(optionTotalPower);
+  }
+
+  for (const [voteOption, optionTotalPow] of Object.entries(sumVotes)) {
+    proposalResult[voteOption] = optionTotalPow
+    .div(totalPower)
+    .decimalPlaces(4)
+    .multipliedBy(100)
+    .toNumber();
+  }
+
+  return {proposalResult, totalPower: totalPower.toString()} 
 }
 
 export function getCurrentResults(transactions, votingPower, proposalInfo) {

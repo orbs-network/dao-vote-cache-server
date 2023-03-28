@@ -1,5 +1,4 @@
 import {getClientV2, getClientV4, getProposalInfo, getTransactions, getAllVotes, getVotingPower, getCurrentResults} from "./contract-api/logic";
-import {getFrozenAddresses} from "./contract-api/getters";
 import { TonClient, TonClient4 } from "ton";
 import {State} from "./state";
 import {TxData, VotingPower, Votes, ProposalResults, ProposalInfo} from "./types";
@@ -24,9 +23,6 @@ export class Fetcher {
 
         const proposalInfo = await getProposalInfo(this.client, this.client4);
         this.state.setProposalInfo(proposalInfo);
-
-        const frozenAddresses = await getFrozenAddresses(this.client);
-        this.state.setFrozenAddresses(frozenAddresses);
     }
 
     async run() {
