@@ -6,3 +6,4 @@ export const votingContract = Address.parse(
 );
 
 export const VOTE_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+export const VOTE_REQUIRED_NUM_OPTIONS = 5;
