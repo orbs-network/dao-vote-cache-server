@@ -5,7 +5,7 @@ import { TaskLoop } from './task-loop';
 import * as Logger from './logger';
 import { State } from './state';
 import { Fetcher } from './fetcher';
-import { votingContract } from "./contract-api/address";
+import { votingContract } from "./contract-api/config";
 
 const SOCKET_TIMEOUT_SEC = 60;
 const PORT = Number(process.env.PORT) || 3000;
