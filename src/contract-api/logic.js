@@ -1,7 +1,7 @@
 import { getHttpEndpoint, getHttpV4Endpoint } from "@orbs-network/ton-access";
 import { Address, beginCell, Cell, TonClient, TonClient4 } from "ton";
 import {getFrozenAddresses, getStartTime, getEndTime, getSnapshotTime} from "./getters";
-import { votingContract, VOTE_OPTIONS } from "./config";
+import { votingContract, VOTE_OPTIONS, VOTE_REQUIRED_NUM_OPTIONS } from "./config";
 import { CUSTODIAN_ADDRESSES } from "./custodian";
 
 import BigNumber from "bignumber.js";
