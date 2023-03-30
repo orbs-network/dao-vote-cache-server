@@ -161,7 +161,7 @@ export function calcProposalResult(votes, votingPower) {
     if (!(voter in votingPower))
       throw new Error(`voter ${voter} not found in votingPower`);
 
-    if (votingPower[voter] < fromNano("0.25")) {
+    if (Number(fromNano(votingPower[voter])) < 0.25) {
       console.log('skipping low balance');
       continue;
     }
